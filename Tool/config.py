@@ -62,8 +62,6 @@ LIST_COLS = [
 CATEGORICAL_COLS = [
 
     "item_price_level",
-    "item_sales_level",
-    "item_collected_level",
     "item_pv_level",
     "user_gender_id",
     "user_age_level",
@@ -75,7 +73,6 @@ CATEGORICAL_COLS = [
     "shop_star_level",
 
     #特征工程
-    "day",
     "hour",
     "predict_category_1",
     "predict_category_2",
@@ -89,13 +86,10 @@ CATEGORICAL_COLS = [
 
     "category_1",
     "category_0",
-    
-    #特征工程
-    "user_query_day_hour",#用户这个小时，查询了多少次
-    "user_query_day",#用户一天，查询了多少次
 
-    "property_matching_number",
-    "category_matching_number",
+    'category_cross_0',
+    'category_cross_1',
+    'category_cross_2',
 ]
 
 #连续特征

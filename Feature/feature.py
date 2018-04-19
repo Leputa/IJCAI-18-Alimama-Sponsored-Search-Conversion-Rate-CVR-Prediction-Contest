@@ -93,7 +93,7 @@ class Feature():
 
         newcolumns = []
 
-        cols = ['item_category_list', 'item_brand_id', 'item_city_id', 'item_price_level', \
+        cols = ['item_category_list','item_price_level', \
                 'item_sales_level', 'item_collected_level', 'item_pv_level', 'user_gender_id', \
                 'user_age_level', 'user_occupation_id', 'user_star_level', 'context_page_id', \
                 'shop_review_num_level', 'shop_star_level']
@@ -104,7 +104,6 @@ class Feature():
             item_cv[col+'_purRate'] = item_cv[col+'_purRate']/item_cnt[col+'_cnt']
 
             data = pd.merge(data, item_cv, how= 'left', on = col)
-            print(data.shape)
             newcolumns.append(col+'_purRate')
 
         data[newcolumns + ['instance_id']].to_pickle(path)
@@ -766,7 +765,7 @@ class Feature():
             print(result.shape)
 
         trick3_columns.extend(
-            ['page_id_user_number_pre_2', 'page_id_trade_number_pre_2', 'page_id_trade_number_pre_all' + '_rate'])
+            ['page_id_user_number_pre_2', 'page_id_trade_number_pre_2', 'page_id_trade_number_pre_2' + '_rate'])
         data = pd.merge(data,result,on=['context_page_id','day'],how='left')
 
         data[['instance_id'] + trick3_columns].to_pickle(trick3_feature_path)
