@@ -426,7 +426,7 @@ class Feature():
         return df_merge
 
 
-    def load_data_with_target(self):
+    def load_data(self):
         print('开始')
 
         data = self.gen_global_index()
@@ -1091,9 +1091,6 @@ class Feature():
         all_data['day'] = all_data.time.apply(lambda x: int(x[8:10]))
         all_data['hour'] = all_data.time.apply(lambda x: int(x[11:13]))
 
-        # 关于一下代码有个疑问，可以尝试优化
-        # 25号的测试数据的数据量明显低于其他日期，明显做过抽样（但抽样方法未知，可能是按照小时抽样）
-        # 是否应为将25号的这些数量统计相关的组合数据按照比例扩大
         user_query_day = all_data.groupby(['user_id', 'day']).size(
         ).reset_index().rename(columns={0: 'user_query_day'})
         all_data = pd.merge(all_data, user_query_day, 'left', on=['user_id', 'day'])
@@ -1379,7 +1376,7 @@ class Feature():
 
 if  __name__ == "__main__":
     f = Feature()
-    f.load_data_with_target()
+    f.load_data()
 
 
 
