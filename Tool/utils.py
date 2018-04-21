@@ -2,7 +2,7 @@ import numpy as np
 import os
 from scipy.sparse import csr_matrix
 
-PATH= '../DataSet/IJCAI-18 Alimama Sponsored Search Conversion Rate(CVR) Prediction Contest/'
+PATH = '../Cache/'
 
 def save_sparse_csr(filename, array):
     filename = os.path.join(PATH, filename)
