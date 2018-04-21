@@ -31,7 +31,7 @@ if __name__ == '__main__':
     #     gc.collect()
     # predictions /= len(predict_list)
     # 内存原因，上述代码跑不出来
-    predictions = predict_list[0]*0.5 + predict_list[1]*0.3 + predict_list[2]*0.2
+    predictions = predict_list[0]*0.45 + predict_list[1]*0.35 + predict_list[2]*0.2
 
     sub = pd.read_csv(config.data_prefix_path + 'test_b.csv', sep=" ")
     sub['predicted_score'] = predictions

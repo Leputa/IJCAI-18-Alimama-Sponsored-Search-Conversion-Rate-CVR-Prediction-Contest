@@ -108,3 +108,20 @@ IGNORE_COLS = [
     "shop_id",
     "context_id"
 ]
+
+CAT_COLS = [
+    'user_gender_id',
+    'user_occupation_id',
+    'context_page_id',
+    'item_category_list',
+    'hour',
+    'map_hour',
+    "category_1",
+    "category_2",
+    'item_price_level',
+    'item_sales_level',
+    'item_collected_level',
+    'item_pv_level',
+    'user_star_level',
+    'shop_star_level',
+    ]
