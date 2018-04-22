@@ -13,31 +13,44 @@ from sklearn.model_selection import cross_val_score
 import lightgbm as lgb
 
 
-trainFileNames = ['xgboost_oof.txt', 'lightgbm_oof.txt', 'lightgbm2_oof.txt']
-testFileNames = ['sub0420_xgboost.txt', 'sub0419_lightgbm.txt', 'sub0420_lightgbm2.txt']
+trainFileNames = ['xgboost_oof.txt', 'lightgbm_oof.txt', 'lightgbm2_oof.txt',
+                  #'xgboost_LR_oof.txt', 'xgboost_FM_FTRL_oof.txt'
+                  ]
+
+testFileNames = ['sub0420_xgboost.txt', 'sub0419_lightgbm.txt', 'sub0420_lightgbm2.txt',
+                 #'sub0421_xgboost_LR.txt','sub0421_xgboost_FM_FTRL.txt'
+                 ]
+
 features = ['instance_id', 'is_trade', 'day' ,
             'diffTime_first', 'diffTime_last', 'user_hour_cntx', 'category_IOU',
             'shop_score_delivery','shop_score_description',
-            'user_mean_hour']
+            'user_mean_hour'
+            ]
 
 def loadData(trainFileNames, testFileNames, features):
 
     print("loading data...")
+    i = 0
 
     for file in trainFileNames:
+        i += 1
         if file == trainFileNames[0]:
-            train = pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'is_trade_oof']]
+            train = pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'is_trade_oof']].rename(
+                columns = {'is_trade_oof':'is_trade_oof'+str(i)})
         else:
             train = pd.merge(
-                train, pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'is_trade_oof']], 
+                train, pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'is_trade_oof']].rename(
+                columns = {'is_trade_oof':'is_trade_oof'+str(i)}), 
                 on = ['instance_id'], how = 'left')
 
     for file in testFileNames:
         if file == testFileNames[0]:
-            test = pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'predicted_score']]
+            test = pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'predicted_score']].rename(
+                columns = {'predicted_score':'predicted_score'+str(i)})
         else:
             test = pd.merge(
-                test, pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'predicted_score']], 
+                test, pd.read_csv(config.data_prefix_path + file, sep = ' ')[['instance_id', 'predicted_score']].rename(
+                columns = {'predicted_score':'predicted_score'+str(i)}), 
                 on = ['instance_id'], how = 'left')
     
     data = pd.read_pickle(config.data_prefix_path + 'data.pkl')[features]
@@ -80,6 +93,7 @@ def OOFStacking(tag = 'val'):
         X_train = train[train.day < 24]
         X_test = train[train.day == 24]
 
+
         for feature in ['instance_id', 'day']:
             X_train.drop([feature], axis=1, inplace=True)
             X_test.drop([feature], axis=1, inplace=True)
@@ -92,11 +106,14 @@ def OOFStacking(tag = 'val'):
 
         target = ['is_trade']
 
-        train_X = X_train[labels].values
+        train_X = X_train[labels]
         train_Y = X_train[target].values.ravel()
-        val_X = X_test[labels].values
+        val_X = X_test[labels]
         val_Y = X_test[target].values.ravel()
 
+        print(train_X.head(0))
+        print("")
+        print(labels)
 
         del X_train,X_test
 
@@ -133,7 +150,7 @@ def OOFStacking(tag = 'val'):
                 verbose_eval = 20)
 
         test['predicted_score'] = gbm.predict(test_X)
-        test[['instance_id', 'predicted_score']].to_csv(config.data_prefix_path + 'sub0420_stacking.txt',sep=" ",index=False)
+        test[['instance_id', 'predicted_score']].to_csv(config.data_prefix_path + 'sub0422_stacking_5.txt',sep=" ",index=False)
 
 if __name__ == "__main__":
     OOFStacking('val')
