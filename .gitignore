@@ -1,1 +1,2 @@
-Cache/*
+*.pkl
+*.npz
