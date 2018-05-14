@@ -25,7 +25,7 @@ class Feature():
         self.all_data = None
         self.train_length = 478085
 
-    """
+        """
         降采样，负样本太多
         如果不采用，会发现准确率超高98%，auc只有0.7
         SMOTE 算法
